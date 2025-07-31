@@ -69,3 +69,28 @@ async def homework_guardrail(ctx, agent: Agent, input_data):
     print("Received Agnet in GD", agent.name)
     reuslt = await Runner.run(guardrail_agent, input_data, context=ctx.context)
     print("Guardrail result:", reuslt)
+    final_output = reuslt.final_output_as(HomeworkOutput)
+    print("Final output from guardrail:", final_output)
+    return GuardrailFunctionOutput(
+        output_info=final_output,
+        tripwire_triggered=not final_output.is_homework
+    )
+
+# main logic 
+async def main():
+    #Create the triage agnet
+    agent = Agent(
+        name="Triage Agent",
+        intsrtuctions = "You determine which agent to use based on the user's homework question",
+        handoffs=[history_agent, math_tutor_agent],
+        input_guardrails=[InputGuardrail(homework_guardrail)],
+    )
+
+    # Run the agent with a sample qurey
+    result = await Runner.run(agent, "I have homework about the french revolution. Can you help me?")
+    print(result.final_output)
+
+# Run the main function
+if __name__ == "__main__":
+    print("\n[STARTING AGENT]\n")
+    asyncio.run(main())
