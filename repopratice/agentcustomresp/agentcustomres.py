@@ -1,7 +1,7 @@
 import asyncio
 from dotenv import load_dotenv
-from agents import Agent, Runner, TResponseInputItem, enable_verbose_stdout_logging, AgentHook
-from agents.run import AgentRunner, self_default_agent_runner
+from agents import Agent, Runner, TResponseInputItem, enable_verbose_stdout_logging
+from agents.run import AgentRunner, set_default_agent_runner
 import rich
 
 # ---------------------
@@ -18,7 +18,7 @@ class MyCustomAgentRunClass(AgentRunner):
 
         return res
 #  -----------
-self_default_agent_runner(MyCustomAgentRunClass())    
+set_default_agent_runner(MyCustomAgentRunClass())    
 
 #  -----------  
 
