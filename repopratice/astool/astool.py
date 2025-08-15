@@ -37,12 +37,22 @@ support_agent = Agent(
 # # ---------------------
 triage_agent = Agent(
     name="triage_agent",
-    instructions=("You are a helpful assistant that triages requests"),
+    instructions=(
+        "You are a triage agent, you delegate task to appropriate or use appropriate given tools"
+        "when user asked for shopping related qurey, you always use given tools"
+        "you never reply on your own, always use given tool to reply user"
+        ),
     model="gpt-4.1-mini",
     openai_client=client,
-    # handoff_description=("You are a helpful assistant that triages requests and hands off to the appropriate agent."),
+    handoff_description="a support agent to help user in post-purchase queries",
     tools=[
-        shopping_agent.as_tool(),
-        support_agent.as_tool()
+        shopping_agent.as_tool(
+            tool_name = "transfer_to_shopping_agent",
+            tool_description = "you assist to finding products and making purchase decisions"
+        ),
+        support_agent.as_tool(
+            tool_name = "transfer_to_support_agent",
+            tool_description = "you assist user to finding products and making purchase decisions"
+        )
     ]
 )
