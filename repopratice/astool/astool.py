@@ -42,6 +42,7 @@ triage_agent = Agent(
     openai_client=client,
     # handoff_description=("You are a helpful assistant that triages requests and hands off to the appropriate agent."),
     tools=[
-        shopping_agent.as_tool()
+        shopping_agent.as_tool(),
+        support_agent.as_tool()
     ]
 )
